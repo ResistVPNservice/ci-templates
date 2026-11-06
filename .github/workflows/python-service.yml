@@ -99,7 +99,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       - name: Trivy — уязвимости в образе
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ steps.names.outputs.image }}:${{ steps.tag.outputs.tag }}
           severity: CRITICAL,HIGH
