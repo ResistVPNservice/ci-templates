@@ -31,7 +31,10 @@ jobs:
         env:
           TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         if: env.TOKEN != ''
-        run: git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
+        run: |
+          # секрет мог сохраниться с переводом строки (CRLF из PowerShell) — убираем пробельные символы
+          TOKEN=$(printf '%s' "$TOKEN" | tr -d '[:space:]')
+          git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: ruff format --check .
