@@ -30,10 +30,11 @@ jobs:
 
 | Секрет | Зачем | Права |
 |---|---|---|
-| `PRIVATE_REPO_TOKEN` | установить наши библиотеки из приватных репозиториев | fine-grained PAT: Contents — Read, на все репозитории организации |
 | `DEPLOY_TOKEN` | автокоммит новой версии в `deploy` | fine-grained PAT: Contents — Read and write, только `deploy` |
 
 Без `DEPLOY_TOKEN` всё работает, просто автовыкатка на staging пропускается.
+
+Библиотеки (`contracts`, `service-kit`, `tg_kit`) публичные — CI и `docker build` ставят их из git без токена.
 
 ## Версии
 

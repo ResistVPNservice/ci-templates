@@ -11,9 +11,6 @@ on:
         required: false
         type: string
         default: "3.12"
-    secrets:
-      PRIVATE_REPO_TOKEN:
-        required: false
 
 permissions:
   contents: read
@@ -27,14 +24,6 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
           cache: pip
-      - name: Доступ к приватным библиотекам организации
-        env:
-          TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-        if: env.TOKEN != ''
-        run: |
-          # PowerShell мог дописать к секрету BOM и CRLF — оставляем только допустимые символы токена GitHub
-          TOKEN=$(printf '%s' "$TOKEN" | tr -cd 'A-Za-z0-9_')
-          git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
       - run: pip install -e ".[dev]"
       - run: ruff check .
       - run: ruff format --check .
