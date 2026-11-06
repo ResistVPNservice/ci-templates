@@ -29,8 +29,8 @@ jobs:
       - run: ruff format --check .
       - run: pytest -q
       - name: Обратная совместимость контрактов
-        if: hashFiles('quantum_contracts/schema.py') != ''
-        run: python -m quantum_contracts.schema check
+        if: hashFiles('resist_contracts/schema.py') != ''
+        run: python -m resist_contracts.schema check
 
   secrets-scan:
     runs-on: ubuntu-latest
