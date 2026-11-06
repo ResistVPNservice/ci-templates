@@ -53,8 +53,8 @@ jobs:
           TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         if: env.TOKEN != ''
         run: |
-          # секрет мог сохраниться с переводом строки (CRLF из PowerShell) — убираем пробельные символы
-          TOKEN=$(printf '%s' "$TOKEN" | tr -d '[:space:]')
+          # PowerShell мог дописать к секрету BOM и CRLF — оставляем только допустимые символы токена GitHub
+          TOKEN=$(printf '%s' "$TOKEN" | tr -cd 'A-Za-z0-9_')
           git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
       - run: pip install -e ".[dev]"
       - run: ruff check .
@@ -90,7 +90,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
         run: |
-          clean=$(printf '%s' "$TOKEN" | tr -d '[:space:]')
+          clean=$(printf '%s' "$TOKEN" | tr -cd 'A-Za-z0-9_')
           [ -n "$clean" ] && echo "::add-mask::$clean"
           echo "value=$clean" >> "$GITHUB_OUTPUT"
       - uses: docker/setup-buildx-action@v3
